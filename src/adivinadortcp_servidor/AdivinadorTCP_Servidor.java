@@ -45,7 +45,7 @@ public class AdivinadorTCP_Servidor {
             // abriendo un socket para el cliente
             socketCliente = socketServidor.accept();
             System.out.println("Connexión acceptada: " + socketCliente);
-            System.out.println("Numero: " + aleatorio);
+            System.out.println("Numero aletorio generado: " + aleatorio);
             // Establece canal de entrada
             entrada = new BufferedReader(new InputStreamReader(socketCliente.getInputStream()));
             // Establece canal de salida
@@ -57,24 +57,54 @@ public class AdivinadorTCP_Servidor {
                 //conversion de String a int
                 int numero = Integer.parseInt(str);
                 String mensaje;
+                String nivel="";
                 System.out.println("Cliente: " + str);
                 System.out.println("CONTADOR: " + contador);
                 if(numero < aleatorio){
                     //System.out.println("El numero es mayor");      
-                    mensaje = "El numero es mayor | numero ingresado "+str+" | te quedan: "+ Integer.toString(10 - contador);
+                    mensaje = "El numero es mayor | numero ingresado "+str+" |Intento: "+contador+"/10"+"| te quedan: "+ Integer.toString(10 - contador)+" intentos";
                 }else{
-                    mensaje = "El numero es menor | numero ingresado "+str+" | te quedan: "+ Integer.toString(10 - contador);
+                    mensaje = "El numero es menor | numero ingresado "+str+" |Intento: "+contador+"/10"+"| te quedan: "+ Integer.toString(10 - contador)+" intentos";
                     }
-                
+                //Condicional si el numero es igual
                 if(numero == aleatorio){
-                    mensaje = "Adivinaste!! | numero ingresado "+str+" | te quedan: "+ Integer.toString(10 - contador);
+                    
+                    if(contador == 1){
+                        nivel = "Me has vencido en el primer intento, realmente "
+                                + "eres un Maestro, el número secreto adivinado es: " 
+                                + Integer.toString(aleatorio);
+                    }
+                    if(contador >=2 && contador <=3){
+                        nivel = "Casi eres eres un Maestro, te ha tomado "+contador+
+                                " cantidad de intentos, has gastado muy pocos intentos "
+                                + "y estuviste muy cerca, el número secreto adivinado es: " 
+                                + Integer.toString(aleatorio) ;
+                    }
+                    if(contador >= 4 && contador <=5){
+                        nivel = "Eres un Aprendiz, te ha tomado "+contador+
+                                " cantidad de intentos,   podrías haberlo descubierto en"
+                                + " menor número de intentos, el número secreto adivinado es: "
+                                + Integer.toString(aleatorio);
+                    }
+                    if(contador >=6 && contador <=7){
+                        nivel = "Eres un Novato, te has tomado "+contador+
+                                " cantidad de intentos,  has tardado mucho, el número secreto adivinado es: "
+                                +Integer.toString(aleatorio);
+                    }
+                    if(contador >=8 && contador <=10){
+                        nivel = "Eres un Ingenuo, te has tomado"+contador+
+                                "cantidad de intentos y te he vencido, "
+                                + "el número secreto es: "+Integer.toString(aleatorio);
+                    }
+                          
+                    mensaje = "Adivinaste !! "+nivel;
+                    salida.println(mensaje);
                     break;
                 }
+                //se envia el mensaje al cliente y se itera el contador
                 salida.println(mensaje);
                 contador++;
-                if (str.equals("Adios")) {
-                    break;
-                }
+               
             }
 
         } catch (IOException e) {

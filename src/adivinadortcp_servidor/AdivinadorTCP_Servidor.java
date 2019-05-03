@@ -17,6 +17,7 @@ import java.net.Socket;
 /**
  *
  * @author Lorena Leal ID: 208313
+ * @asignatura Interconectividad
  */
 public class AdivinadorTCP_Servidor {
 
